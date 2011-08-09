@@ -44,6 +44,7 @@ COLLECTORS = {}
 GENERATION = 0
 LOG = logging.getLogger('tcollector')
 ALIVE = True
+TAGFILE = "~/.tcollector_tags"
 
 
 def register_collector(collector):
@@ -642,6 +643,13 @@ def main(argv):
 
     if options.pidfile:
         write_pid(options.pidfile)
+
+    if os.path.exists(os.path.expanduser(TAGFILE)):
+        f = open(os.path.expanduser(TAGFILE), "r")
+        for line in f.readlines():
+            for tag in line.split():
+                options.tags.append(tag)
+        f.close()
 
     # validate everything
     tags = {}
